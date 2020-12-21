@@ -32,7 +32,6 @@ import java.util.Map;
 @RequestMapping("/edu/teacher")
 public class TeacherController {
 
-    // 注入service
     @Autowired
     private TeacherService teacherService;
     //1 查询讲师表所有数据
