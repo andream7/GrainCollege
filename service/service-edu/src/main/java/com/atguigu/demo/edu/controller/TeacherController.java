@@ -30,6 +30,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/edu/teacher")
+@CrossOrigin
 public class TeacherController {
 
     @Autowired
@@ -85,7 +86,7 @@ public class TeacherController {
 
         Page<Teacher> pageTeacher = new Page<>(current,limit);
 
-//        构建条件
+        // 构建条件
         QueryWrapper<Teacher> wrapper = new QueryWrapper<>();
         // 多条件组合 动态sql
         String name = teacherQuery.getName();
@@ -107,16 +108,14 @@ public class TeacherController {
         if (!StringUtils.isEmpty(end)) {
             wrapper.le("gmt_create", end);
         }
+
+        wrapper.orderByDesc("gmt_create");
         teacherService.page(pageTeacher, wrapper);
 
         long total = pageTeacher.getTotal();
         List<Teacher> records = pageTeacher.getRecords();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("total", total);
-        map.put("rows", records);
-
-        return Res.ok().data(map);
+        return Res.ok().data("total", total).data("rows", records);
     }
 
     // 添加讲师接口的方法
@@ -131,7 +130,7 @@ public class TeacherController {
     @GetMapping("getTeacher/{id}")
     public Res getById(@PathVariable String id) {
         Teacher teacher = teacherService.getById(id);
-        return Res.ok().data("item",teacher);
+        return Res.ok().data("teacher",teacher);
 
     }
 
