@@ -4,6 +4,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.atguigu.oss.service.OssService;
 import com.atguigu.oss.utils.ConstantPropertiesUtil;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +27,11 @@ public class OssServiceImpl implements OssService {
             InputStream inputStream = file.getInputStream();
             String filename = file.getOriginalFilename();
             String uuid = UUID.randomUUID().toString().replaceAll("-","");
-            filename = filename + uuid;
+            filename = uuid + filename;
+            
+            // 文件按照时间日期进行分类
+            String datePath = new DateTime().toString("yyyy/MM/dd");
+            filename = datePath + "/" + filename;
             // 调用方法实现上传
             ossClient.putObject(bucketName, filename, inputStream);
 
